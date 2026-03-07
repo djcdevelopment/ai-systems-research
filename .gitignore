@@ -1,0 +1,33 @@
+﻿# Ignore OS/editor noise
+.DS_Store
+Thumbs.db
+
+# Node / JS
+node_modules/
+dist/
+build/
+coverage/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Env / secrets
+.env
+.env.*
+*.local
+
+# Logs / temp
+*.log
+tmp/
+temp/
+
+# Generated artifacts
+artifacts/generated/
+artifacts/tmp/
+
+# IDE
+.vscode/
+.idea/
