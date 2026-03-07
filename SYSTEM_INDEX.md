@@ -4,7 +4,13 @@
 
 ### liveView
 - repo: D:\work\liveView
-- description: deterministic artifact pipeline with ingest and UI layers
+- type: implementation system
+- description: deterministic artifact pipeline with separate ingest and UI layers
+- current focus: use structured artifacts and bounded interfaces to support multi-model development and later reasoning/synthesis
+- notable files:
+  - PROJECT_CONTEXT.md
+  - SNAPSHOT_CONTRACT.md
 
 ## Notes
-Use this file to track the systems referenced by research artifacts.
+This file tracks the implementation systems referenced by research artifacts.
+Artifacts in this repo should point back to concrete systems, runs, files, tests, and outcomes.
