@@ -38,3 +38,11 @@ This repo stores structured research artifacts for AI system architecture, imple
 - 1+ snapshot
 - 1+ meaningful question
 - enough evidence to support 2–3 candidate claims
+## Related Contracts
+
+- SYSTEM_INDEX.md
+- ARTIFACT_SCHEMA.md
+
+## Artifact Emission Rule
+
+Implementation-session artifacts should conform to the definitions in ARTIFACT_SCHEMA.md whenever possible.
