@@ -138,6 +138,72 @@ These artifacts may later be referenced by research artifacts in:
 
 ---
 
+## Schema: system_snapshot.md
+
+### Required Path
+- artifacts/sessions/<timestamp>/system_snapshot.md
+
+### Required Structure
+
+# System Snapshot
+
+## Components
+(Modules, services, repos, or tools involved in this session.)
+
+## Data Flow
+(Producer → transformation → consumer.)
+
+## Artifact Contracts
+(Artifacts produced or referenced in this session.)
+
+## Key Files
+(Files that define or constrain current system state.)
+
+### Notes
+- Captures system context at session time.
+- Helps downstream analysis interpret other artifacts without requiring repo exploration.
+
+---
+
+## Schema: session_reasoning_graph.json
+
+### Required Path
+- artifacts/sessions/<timestamp>/session_reasoning_graph.json
+
+### Required JSON Shape
+
+{
+  "session_id": "string",
+  "nodes": [
+    {
+      "id": "string",
+      "action": "string",
+      "evidence": [],
+      "outcome": "string",
+      "next": []
+    }
+  ],
+  "edges": [
+    { "from": "string", "to": "string", "reason": "string" }
+  ],
+  "minimal_path": [],
+  "exploration_branches": []
+}
+
+### Field Meanings
+
+- session_id: matches the parent session folder name
+- nodes: ordered reasoning steps with evidence and outcomes
+- edges: directed connections between nodes with reasons
+- minimal_path: smallest node sequence that reproduces the session outcome
+- exploration_branches: node sequences that were exploratory or redundant
+
+### Notes
+- Enables operator observability without additional manual logging.
+- Supports future cross-session pattern analysis (reasoning efficiency, recurring discovery branches).
+
+---
+
 ## Schema: request_log.json
 
 ### Required Path
@@ -174,11 +240,13 @@ These artifacts may later be referenced by research artifacts in:
 artifacts/
   sessions/
     <timestamp>/
+      system_snapshot.md
       lesson_learned.md
       complexity_inflection_points.md
       strategy_context_reduction.md
       research_bridge.md
       request_log.json
+      session_reasoning_graph.json
 
 ---
 

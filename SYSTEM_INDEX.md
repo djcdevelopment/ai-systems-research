@@ -1,5 +1,7 @@
 ﻿# System Index
 
+This repo's contracts live at root: ARTIFACT_SCHEMA.md (session artifact shape), RESEARCH_CONTRACT.md (research artifact types), AGENTS.md (agent behavior).
+
 ## Systems Referenced
 
 ### liveView
@@ -13,9 +15,9 @@ Deterministic artifact pipeline with separate ingest and UI layers.
 Designed to support multi-model development workflows and structured artifact production.
 
 key_contract_files:
-- PROJECT_CONTEXT.md
-- SNAPSHOT_CONTRACT.md
-- RESEARCH_LINK.md
+- PROJECT_CONTEXT.md — project structure, architecture, dev guidelines
+- SNAPSHOT_CONTRACT.md — snapshot artifact shape and emission rules
+- RESEARCH_LINK.md — declares how liveView connects to this research hub
 
 artifact_outputs:
 - artifacts/sessions/

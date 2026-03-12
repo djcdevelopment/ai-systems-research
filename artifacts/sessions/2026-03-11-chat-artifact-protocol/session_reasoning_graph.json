@@ -1,0 +1,15 @@
+{
+  "session_id": "2026-03-11-chat-artifact-protocol",
+  "nodes": [
+    { "id": "N1", "action": "Identify chat artifact gap" },
+    { "id": "N2", "action": "Explore repository contracts" },
+    { "id": "N3", "action": "Design minimal restart infrastructure" },
+    { "id": "N4", "action": "Implement artifact protocol changes" }
+  ],
+  "edges": [
+    { "from": "N1", "to": "N2" },
+    { "from": "N2", "to": "N3" },
+    { "from": "N3", "to": "N4" }
+  ],
+  "minimal_path": ["N1","N2","N3","N4"]
+}
