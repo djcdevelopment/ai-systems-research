@@ -38,6 +38,62 @@ These artifacts may later be referenced by research artifacts in:
 
 ---
 
+## Session Package Contract
+
+### Canonical Handoff Boundary
+
+- `package-research-session.ps1` is the canonical boundary for packaging reflective session artifacts into `artifacts/sessions/<timestamp>/` and emitting the corresponding `SESSION_LOG.jsonl` entry.
+- `liveview/ingest` operational artifacts and `ai-systems-research` session packages remain separate layers. This schema only defines the research/session package side of the handoff.
+
+### Required Artifacts
+
+The current minimum packageable set is the markdown session package enforced by `package-research-session.ps1`:
+
+- `lesson_learned.md`
+- `complexity_inflection_points.md`
+- `strategy_context_reduction.md`
+- `research_bridge.md`
+- `system_snapshot.md`
+
+### Optional Artifacts
+
+Optional artifacts may be present in a valid session package, but are not required for package validity:
+
+- `request_log.json`
+- `session_reasoning_graph.json`
+- `analysis_prompt.md`
+
+### Packaging-Emitted Metadata
+
+Each `SESSION_LOG.jsonl` entry emitted by the packaging script should include:
+
+- `session_id`
+- `timestamp`
+- `system_id`
+- `status`
+- `summary`
+- `open_threads`
+- `artifacts`
+- `conformance`
+
+### Conformance Levels
+
+- `canonical`: all required artifacts are present and no optional artifacts are needed for validity.
+- `extended`: all required artifacts are present and one or more optional artifacts are included.
+- `reduced`: intentionally incomplete package. This level is documented for legacy or explicitly supported partial bundles; it is not accepted by the current packaging script.
+
+### Timestamp Rule
+
+- New `SESSION_LOG.jsonl` entries emitted by the packaging script should use ISO 8601 UTC timestamps.
+- Existing ledger entries may still be date-only. Consumers should remain backward-tolerant while the ledger transitions to UTC timestamps.
+
+### Legacy Note
+
+- Older session folders in this repository include at least one reduced package without `system_snapshot.md`.
+- That legacy evidence does not change the current package contract: `system_snapshot.md` remains required for canonical packaging.
+
+---
+
 ## Schema: lesson_learned.md
 
 ### Required Path
@@ -162,12 +218,13 @@ These artifacts may later be referenced by research artifacts in:
 ### Notes
 - Captures system context at session time.
 - Helps downstream analysis interpret other artifacts without requiring repo exploration.
+- Required for current canonical and extended session packages.
 
 ---
 
 ## Schema: session_reasoning_graph.json
 
-### Required Path
+### Optional Path
 - artifacts/sessions/<timestamp>/session_reasoning_graph.json
 
 ### Required JSON Shape
@@ -201,12 +258,13 @@ These artifacts may later be referenced by research artifacts in:
 ### Notes
 - Enables operator observability without additional manual logging.
 - Supports future cross-session pattern analysis (reasoning efficiency, recurring discovery branches).
+- Optional extension artifact for an otherwise valid package.
 
 ---
 
 ## Schema: request_log.json
 
-### Required Path
+### Optional Path
 - artifacts/sessions/<timestamp>/request_log.json
 
 ### Required JSON Shape
@@ -233,6 +291,25 @@ These artifacts may later be referenced by research artifacts in:
 - open_questions: unresolved questions after the task
 - artifacts_generated: emitted artifact file paths
 
+### Notes
+- Optional extension artifact for an otherwise valid package.
+
+---
+
+## Schema: analysis_prompt.md
+
+### Optional Path
+- artifacts/sessions/<timestamp>/analysis_prompt.md
+
+### Expected Structure
+
+- Prompt or instruction artifact used to generate or evaluate the session package.
+- May include task framing, output requirements, evaluation criteria, or explicit claims to verify.
+
+### Notes
+- Optional meta-artifact.
+- Preserve when it materially explains how the rest of the package was produced.
+
 ---
 
 ## Recommended Session Folder Shape
@@ -240,13 +317,14 @@ These artifacts may later be referenced by research artifacts in:
 artifacts/
   sessions/
     <timestamp>/
-      system_snapshot.md
       lesson_learned.md
       complexity_inflection_points.md
       strategy_context_reduction.md
       research_bridge.md
-      request_log.json
-      session_reasoning_graph.json
+      system_snapshot.md
+      [optional] request_log.json
+      [optional] session_reasoning_graph.json
+      [optional] analysis_prompt.md
 
 ---
 

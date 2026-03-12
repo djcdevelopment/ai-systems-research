@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la \"D:\\\\work\\\\ai-systems-research\" | grep -E \"\\\\.\\(ps1|md|jsonl\\)$\")",
+      "Bash(find /d/work/liveview/ui/src -name \"*loader\\\\|*snapshot\\\\|*ingest\" | head -10)"
+    ]
+  }
+}

@@ -162,49 +162,252 @@ research-output/
 
 ---
 
-### Step 2 – Package Artifacts
+### Step 2
 
-Artifacts are copied into the research repository.
+# Artifact Session Packaging Workflow
 
-```
+The validated workflow for packaging a session is now split into two variants.
+
+### Variant A – Implementation Session Packaging
+
+Used when canonical session artifacts are generated directly from implementation work.
+
+Example source:
+- `liveview/ui`
+- generated artifacts in a working folder or explicitly selected files
+
+Artifacts are copied into:
+
+```text
 artifacts/sessions/<session-id>
-```
-
-A script (`package-research-session.ps1`) automates this process.
-
-The script performs:
-
-1. capture implementation repo commit
-2. capture repo tags
-3. copy `research-output`
-4. update `request_log.json`
-5. append `SESSION_LOG.jsonl`
-6. stage artifacts for commit
 
 ---
 
-### Step 3 – Session Ledger Update
 
-Each session must append an entry to:
+---
 
-```
-SESSION_LOG.jsonl
-```
+## 3. Command to overwrite the script in the repo
 
-Example entry:
+From `D:\work\ai-systems-research`:
 
-```
-{
-  "session_id": "2026-03-11-liveview-ui",
-  "system": "liveview",
-  "focus": "research UI prototype analysis",
-  "artifact_path": "artifacts/sessions/2026-03-11-liveview-ui"
+```powershell
+@'
+param(
+    [string]$ResearchRepo = "D:\work\ai-systems-research",
+    [string]$LiveViewRepo = "D:\work\liveview\ui",
+    [string]$SessionId = $(Get-Date -Format "yyyy-MM-dd-liveview-ui-research"),
+    [string]$SystemId = "liveview",
+    [string]$Status = "complete",
+    [string]$Summary = "Packaged research-derived session artifacts for LiveView UI observability work.",
+    [string[]]$SourceFiles = @(),
+    [string]$SourceDir = "",
+    [switch]$IncludeRequestLog,
+    [switch]$IncludeReasoningGraph,
+    [switch]$Force
+)
+
+Write-Host "---- AI Systems Research Session Packager ----"
+
+$sessionRoot = Join-Path $ResearchRepo "artifacts\sessions\$SessionId"
+$sessionLog = Join-Path $ResearchRepo "SESSION_LOG.jsonl"
+
+$canonicalRequired = @(
+    "lesson_learned.md",
+    "complexity_inflection_points.md",
+    "strategy_context_reduction.md",
+    "research_bridge.md",
+    "system_snapshot.md"
+)
+
+$canonicalOptional = @(
+    "request_log.json",
+    "session_reasoning_graph.json"
+)
+
+function Resolve-SourceFiles {
+    param(
+        [string[]]$Files,
+        [string]$Dir
+    )
+
+    $resolved = @()
+
+    if ($Files.Count -gt 0) {
+        foreach ($file in $Files) {
+            if (!(Test-Path $file)) {
+                throw "Source file not found: $file"
+            }
+            $resolved += (Resolve-Path $file).Path
+        }
+    }
+
+    if ($Dir) {
+        if (!(Test-Path $Dir)) {
+            throw "Source directory not found: $Dir"
+        }
+        $resolved += Get-ChildItem -Path $Dir -File | Select-Object -ExpandProperty FullName
+    }
+
+    $resolved | Select-Object -Unique
 }
-```
 
-The session log acts as the **discovery boundary for sessions**.
+function Get-BasenameMap {
+    param([string[]]$Files)
 
----
+    $map = @{}
+    foreach ($file in $Files) {
+        $name = [System.IO.Path]::GetFileName($file)
+        if (-not $map.ContainsKey($name)) {
+            $map[$name] = $file
+        }
+    }
+    return $map
+}
+
+function New-DefaultRequestLog {
+    param(
+        [string]$SessionId,
+        [string]$SystemId,
+        [string]$LiveViewRepo
+    )
+
+    $commit = ""
+    $tags = @()
+
+    if (Test-Path $LiveViewRepo) {
+        try { $commit = (git -C $LiveViewRepo rev-parse HEAD).Trim() } catch {}
+        try { $tags = @(git -C $LiveViewRepo tag --points-at HEAD) } catch {}
+    }
+
+    return @{
+        session_id = $SessionId
+        system_id = $SystemId
+        generated_at = (Get-Date).ToUniversalTime().ToString("o")
+        repo_state = @{
+            repo = "liveview-ui"
+            path = $LiveViewRepo
+            commit = $commit
+            tags = $tags
+        }
+        inputs_used = @()
+        decisions = @()
+        open_questions = @()
+        artifacts_generated = @()
+        files_touched = @()
+    }
+}
+
+function New-DefaultReasoningGraph {
+    param(
+        [string]$SessionId
+    )
+
+    return @{
+        session_id = $SessionId
+        root_nodes = @("n1")
+        nodes = @(
+            @{
+                node_id = "n1"
+                label = "Packaged research session artifacts"
+                status = "complete"
+                children = @()
+                evidence = @("SESSION_LOG.jsonl updated")
+            }
+        )
+    }
+}
+
+$sourcePaths = Resolve-SourceFiles -Files $SourceFiles -Dir $SourceDir
+if ($sourcePaths.Count -eq 0) {
+    throw "No source files provided. Use -SourceFiles or -SourceDir."
+}
+
+$basenameMap = Get-BasenameMap -Files $sourcePaths
+
+$missingRequired = $canonicalRequired | Where-Object { -not $basenameMap.ContainsKey($_) }
+if ($missingRequired.Count -gt 0) {
+    throw "Missing required canonical artifacts: $($missingRequired -join ', ')"
+}
+
+if ((Test-Path $sessionRoot) -and -not $Force) {
+    throw "Session folder already exists: $sessionRoot. Use -Force to overwrite."
+}
+
+New-Item -ItemType Directory -Path $sessionRoot -Force | Out-Null
+
+Write-Host "Copying canonical artifacts..."
+foreach ($name in $canonicalRequired) {
+    Copy-Item $basenameMap[$name] (Join-Path $sessionRoot $name) -Force
+}
+
+foreach ($name in $canonicalOptional) {
+    if ($basenameMap.ContainsKey($name)) {
+        Copy-Item $basenameMap[$name] (Join-Path $sessionRoot $name) -Force
+    }
+}
+
+if ($IncludeRequestLog -and -not (Test-Path (Join-Path $sessionRoot "request_log.json"))) {
+    Write-Host "Creating default request_log.json..."
+    New-DefaultRequestLog -SessionId $SessionId -SystemId $SystemId -LiveViewRepo $LiveViewRepo |
+        ConvertTo-Json -Depth 10 |
+        Set-Content (Join-Path $sessionRoot "request_log.json")
+}
+
+if ($IncludeReasoningGraph -and -not (Test-Path (Join-Path $sessionRoot "session_reasoning_graph.json"))) {
+    Write-Host "Creating default session_reasoning_graph.json..."
+    New-DefaultReasoningGraph -SessionId $SessionId |
+        ConvertTo-Json -Depth 10 |
+        Set-Content (Join-Path $sessionRoot "session_reasoning_graph.json")
+}
+
+$artifactFiles = Get-ChildItem -Path $sessionRoot -File | Sort-Object Name
+$artifactPaths = $artifactFiles | ForEach-Object { "artifacts/sessions/$SessionId/$($_.Name)" }
+
+$entry = [ordered]@{
+    session_id = $SessionId
+    timestamp = ((Get-Date).ToUniversalTime().ToString("yyyy-MM-dd"))
+    system_id = $SystemId
+    status = $Status
+    summary = $Summary
+    open_threads = @()
+    artifacts = $artifactPaths
+}
+
+if (!(Test-Path $sessionLog)) {
+    New-Item -ItemType File -Path $sessionLog -Force | Out-Null
+}
+
+$existing = @()
+if ((Get-Item $sessionLog).Length -gt 0) {
+    $existing = Get-Content $sessionLog
+    foreach ($line in $existing) {
+        if ([string]::IsNullOrWhiteSpace($line)) { continue }
+        try {
+            $obj = $line | ConvertFrom-Json
+            if ($obj.session_id -eq $SessionId) {
+                throw "SESSION_LOG.jsonl already contains session_id '$SessionId'"
+            }
+        } catch {
+            throw "Invalid existing SESSION_LOG.jsonl line or duplicate session id: $($_.Exception.Message)"
+        }
+    }
+}
+
+Write-Host "Appending SESSION_LOG.jsonl entry..."
+($entry | ConvertTo-Json -Compress) | Add-Content $sessionLog
+
+Write-Host "Staging session bundle and ledger..."
+git -C $ResearchRepo add "artifacts/sessions/$SessionId"
+git -C $ResearchRepo add "SESSION_LOG.jsonl"
+
+Write-Host ""
+Write-Host "Packaged session: $SessionId"
+Write-Host "Session folder: $sessionRoot"
+Write-Host "Ledger updated: $sessionLog"
+Write-Host ""
+Write-Host "Next:"
+Write-Host "git commit -m `"research session: $SessionId`""
+'@ | Set-Content .\package-research-session.ps1
 
 ### Step 4 – Commit Artifact Session
 

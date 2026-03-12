@@ -25,9 +25,10 @@ $canonicalRequired = @(
     "system_snapshot.md"
 )
 
-$canonicalOptional = @(
+$optionalArtifacts = @(
     "request_log.json",
-    "session_reasoning_graph.json"
+    "session_reasoning_graph.json",
+    "analysis_prompt.md"
 )
 
 function Resolve-SourceFiles {
@@ -70,57 +71,20 @@ function Get-BasenameMap {
     return $map
 }
 
-function New-DefaultRequestLog {
-    param(
-        [string]$SessionId,
-        [string]$SystemId,
-        [string]$LiveViewRepo
-    )
+function Get-DetectedOptionalArtifacts {
+    param([hashtable]$BasenameMap)
 
-    $commit = ""
-    $tags = @()
-
-    if (Test-Path $LiveViewRepo) {
-        try { $commit = (git -C $LiveViewRepo rev-parse HEAD).Trim() } catch {}
-        try { $tags = @(git -C $LiveViewRepo tag --points-at HEAD) } catch {}
-    }
-
-    return @{
-        session_id = $SessionId
-        system_id = $SystemId
-        generated_at = (Get-Date).ToUniversalTime().ToString("o")
-        repo_state = @{
-            repo = "liveview-ui"
-            path = $LiveViewRepo
-            commit = $commit
-            tags = $tags
-        }
-        inputs_used = @()
-        decisions = @()
-        open_questions = @()
-        artifacts_generated = @()
-        files_touched = @()
-    }
+    return $optionalArtifacts | Where-Object { $BasenameMap.ContainsKey($_) }
 }
 
-function New-DefaultReasoningGraph {
-    param(
-        [string]$SessionId
-    )
+function Get-Conformance {
+    param([string[]]$DetectedOptionalArtifacts)
 
-    return @{
-        session_id = $SessionId
-        root_nodes = @("n1")
-        nodes = @(
-            @{
-                node_id = "n1"
-                label = "Packaged research session artifacts"
-                status = "complete"
-                children = @()
-                evidence = @("SESSION_LOG.jsonl updated")
-            }
-        )
+    if ($DetectedOptionalArtifacts.Count -gt 0) {
+        return "extended"
     }
+
+    return "canonical"
 }
 
 $sourcePaths = Resolve-SourceFiles -Files $SourceFiles -Dir $SourceDir
@@ -139,6 +103,13 @@ if ((Test-Path $sessionRoot) -and -not $Force) {
     throw "Session folder already exists: $sessionRoot. Use -Force to overwrite."
 }
 
+if ($IncludeRequestLog -or $IncludeReasoningGraph) {
+    Write-Host "Include switches are deprecated. Optional artifacts must be supplied as source files."
+}
+
+$detectedOptionalArtifacts = @(Get-DetectedOptionalArtifacts -BasenameMap $basenameMap)
+$conformance = Get-Conformance -DetectedOptionalArtifacts $detectedOptionalArtifacts
+
 New-Item -ItemType Directory -Path $sessionRoot -Force | Out-Null
 
 Write-Host "Copying canonical artifacts..."
@@ -146,43 +117,25 @@ foreach ($name in $canonicalRequired) {
     Copy-Item $basenameMap[$name] (Join-Path $sessionRoot $name) -Force
 }
 
-foreach ($name in $canonicalOptional) {
+Write-Host "Copying optional artifacts..."
+foreach ($name in $optionalArtifacts) {
     if ($basenameMap.ContainsKey($name)) {
         Copy-Item $basenameMap[$name] (Join-Path $sessionRoot $name) -Force
     }
 }
 
-if ($IncludeRequestLog -and -not (Test-Path (Join-Path $sessionRoot "request_log.json"))) {
-    Write-Host "Creating default request_log.json..."
-    New-DefaultRequestLog -SessionId $SessionId -SystemId $SystemId -LiveViewRepo $LiveViewRepo |
-        ConvertTo-Json -Depth 10 |
-        Set-Content (Join-Path $sessionRoot "request_log.json")
-}
-
-if ($IncludeReasoningGraph -and -not (Test-Path (Join-Path $sessionRoot "session_reasoning_graph.json"))) {
-    Write-Host "Creating default session_reasoning_graph.json..."
-    New-DefaultReasoningGraph -SessionId $SessionId |
-        ConvertTo-Json -Depth 10 |
-        Set-Content (Join-Path $sessionRoot "session_reasoning_graph.json")
-}
-
 $artifactFiles = Get-ChildItem -Path $sessionRoot -File | Sort-Object Name
 $artifactPaths = $artifactFiles | ForEach-Object { "artifacts/sessions/$SessionId/$($_.Name)" }
-
-$sessionDate = $null
-if ($SessionId -match '^(?<date>\d{4}-\d{2}-\d{2})-') {
-    $sessionDate = $Matches['date']
-} else {
-    $sessionDate = (Get-Date).ToString("yyyy-MM-dd")
-}
+$timestamp = (Get-Date).ToUniversalTime().ToString("o")
 $entry = [ordered]@{
     session_id = $SessionId
-    timestamp = $sessionDate
+    timestamp = $timestamp
     system_id = $SystemId
     status = $Status
     summary = $Summary
     open_threads = @()
     artifacts = $artifactPaths
+    conformance = $conformance
 }
 
 if (!(Test-Path $sessionLog)) {
