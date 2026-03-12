@@ -1,0 +1,39 @@
+{ "repo_state": {
+  "repo": "liveview-ui",
+  "commit": "cd2e818a41aca9fb773e7f2fdc10eda70aa0a230"
+   },
+  "artifact": "request_log.json",
+  "assessment": "partially_supported",
+  "verified_observations": [
+    {
+      "claim": "A renderer-local read model exists.",
+      "evidence": [
+        "src/components/research/renderers/requestLogReadModel.ts:11-20"
+      ]
+    },
+    {
+      "claim": "Structured rendering is tolerant of extra entry fields.",
+      "evidence": [
+        "src/components/research/renderers/RequestLogRenderer.tsx:31-39",
+        "src/components/research/renderers/RequestLogRenderer.tsx:82-88"
+      ]
+    },
+    {
+      "claim": "Renderer mismatch falls back to raw JSON instead of failing hard.",
+      "evidence": [
+        "src/components/research/renderers/RequestLogRenderer.tsx:44-50"
+      ]
+    }
+  ],
+  "soft_contract_points": [
+    "The loader does not validate a strict artifact envelope before dispatching to the renderer.",
+    "The read model only requires session_id plus entries[], so entry-level shape is mostly implicit.",
+    "No schema version or producer metadata is enforced in the UI."
+  ],
+  "overfitting_signals": [
+    "The renderer expects request_id, timestamp, type, prompt_summary, status, and tokens_used field names.",
+    "Artifact identity is derived from the filename request_log.json in loadSessionPackage.ts."
+  ],
+  "visible_gap": "Renderer mismatch is displayed inline but not surfaced as telemetry or diagnostics state.",
+  "next_step": "Add strict envelope validation and emit mismatch diagnostics when the read model does not match."
+}

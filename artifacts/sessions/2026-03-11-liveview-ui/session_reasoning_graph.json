@@ -1,0 +1,43 @@
+{
+  "artifact": "session_reasoning_graph.json",
+  "assessment": "partially_supported",
+  "verified_observations": [
+    {
+      "claim": "A renderer-local read model exists.",
+      "evidence": [
+        "src/components/research/renderers/reasoningGraphReadModel.ts:11-20"
+      ]
+    },
+    {
+      "claim": "The structured renderer tolerates partial nodes and unknown fields.",
+      "evidence": [
+        "src/components/research/renderers/ReasoningGraphRenderer.tsx:20-33",
+        "src/components/research/renderers/ReasoningGraphRenderer.tsx:61-65"
+      ]
+    },
+    {
+      "claim": "If root_nodes are unusable, the UI degrades to a flat node list.",
+      "evidence": [
+        "src/components/research/renderers/ReasoningGraphRenderer.tsx:95-110"
+      ]
+    },
+    {
+      "claim": "Restart-context derivation consumes this artifact and records provenance plus warnings.",
+      "evidence": [
+        "src/lib/restartContext.ts:22-105",
+        "src/lib/restartContext.ts:115-125"
+      ]
+    }
+  ],
+  "soft_contract_points": [
+    "The read model requires session_id, nodes[], and root_nodes[] but does not validate node internals beyond best-effort normalization.",
+    "The semantic meaning of node status values is inferred ad hoc in the UI.",
+    "Parent-child consistency is not validated as part of artifact loading."
+  ],
+  "overfitting_signals": [
+    "The implementation assumes node_id, parent, children, evidence, and root_nodes naming.",
+    "Restart-context derivation assumes unresolved nodes are any status other than resolved or complete."
+  ],
+  "visible_gap": "Graph/read-model mismatch produces inline fallback, but not research-track telemetry.",
+  "next_step": "Split strict envelope validation from tolerant graph payload interpretation and move graph read-model utilities out of component-layer code."
+}
