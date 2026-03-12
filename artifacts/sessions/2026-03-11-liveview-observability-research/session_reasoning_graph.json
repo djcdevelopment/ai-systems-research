@@ -1,0 +1,19 @@
+{
+    "nodes":  [
+                  {
+                      "label":  "Packaged research session artifacts",
+                      "node_id":  "n1",
+                      "evidence":  [
+                                       "SESSION_LOG.jsonl updated"
+                                   ],
+                      "status":  "complete",
+                      "children":  [
+
+                                   ]
+                  }
+              ],
+    "session_id":  "2026-03-11-liveview-observability-research",
+    "root_nodes":  [
+                       "n1"
+                   ]
+}
