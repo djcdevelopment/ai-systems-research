@@ -1,0 +1,23 @@
+﻿## main...origin/main
+ M data/projections/activity_calendar.ndjson
+ M data/projections/artifact_index.ndjson
+ M data/projections/artifact_workflow_paths.ndjson
+ M data/projections/decision_trace.ndjson
+ M data/projections/entity_usage_map.ndjson
+ M data/projections/error_debug_traces.ndjson
+ M data/projections/lineage_views.ndjson
+ M data/projections/operator_attention_queue.ndjson
+ M data/projections/projection_validation.json
+ M data/projections/search_index.ndjson
+ M data/projections/session_classification.ndjson
+ M data/projections/session_strategy_summary.ndjson
+ M data/projections/snapshot_manifest.first_full_dataset.json
+ M data/projections/timeline.ndjson
+ M data/projections/tool_loop_patterns.ndjson
+ M data/projections/typed_vs_voice.ndjson
+?? archived/
+?? data/projections/projection_catalog.json
+?? dump.txt
+?? src/chatgpt_parser.egg-info/
+?? src/chatgpt_parser/projections/catalog.py
+?? tmp/

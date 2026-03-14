@@ -1,0 +1,15 @@
+- Task: inspect `ai-systems-research` for the current research packaging contract, then generate a new `chatgpt_parser` research session that conforms to that contract.
+- Constraints:
+  - treat `ai-systems-research` as the contract authority
+  - do not invent filenames, folder shapes, or ledger behavior
+  - ground claims in repo evidence
+  - distinguish confirmed implementation reality from intended architecture, inference, and uncertainty
+- Required outputs:
+  - `lesson_learned.md`
+  - `complexity_inflection_points.md`
+  - `strategy_context_reduction.md`
+  - `research_bridge.md`
+  - `system_snapshot.md`
+- Optional outputs included:
+  - `request_log.json`
+  - `analysis_prompt.md`

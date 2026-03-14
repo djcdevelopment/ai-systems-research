@@ -1,0 +1,44 @@
+﻿dba25b1b391798eca1d61b542eabec4380355e62 2026-03-13 23:57:23 -0700 dciula Add audio STT indexing and transcription pipeline
+
+M	README.md
+A	docs/AUDIO_STT_PLAN_2026-03-13.md
+A	docs/AUDIO_STT_PLAN_archCollab.md
+A	docs/AUDIO_STT_RUNBOOK.md
+A	docs/AUDIO_STT_STAGE2_codex_prompt.md
+A	docs/AUDIO_STT_STATUS_2026-03-13.md
+A	pipeline/audio_stt/01_stage_1_transcribe_command.md
+A	pipeline/audio_stt/02_stage_2_sidecar_contract_and_linkage.md
+A	pipeline/audio_stt/03_stage_3_operational_controls.md
+A	pipeline/audio_stt/04_stage_4_provider_integration.md
+A	pipeline/audio_stt/05_stage_5_validation_and_rollout.md
+A	pipeline/audio_stt/README.md
+M	pyproject.toml
+M	src/chatgpt_parser/cli.py
+M	src/chatgpt_parser/multimodal/__init__.py
+M	src/chatgpt_parser/multimodal/audio_index.py
+A	src/chatgpt_parser/multimodal/audio_transcribe.py
+M	src/chatgpt_parser/multimodal/transcripts.py
+M	src/chatgpt_parser/parser.py
+M	src/chatgpt_parser/projections/builder.py
+M	src/chatgpt_parser/schemas.py
+M	tests/test_audio_index.py
+A	tests/test_audio_stt_smoke.py
+A	tests/test_audio_transcribe.py
+M	tests/test_parser.py
+M	tests/test_transcript_linkage.py
+93caa02a51ccf9cd92a46f67df4d7dad4a84b22b 2026-03-13 20:29:21 -0700 dciula Improve projection ranking hygiene
+
+M	ARCHITECTURE_STATE.md
+M	data/projections/artifact_workflow_summary.json
+M	data/projections/command_usage.ndjson
+M	data/projections/hub_suggestions.ndjson
+M	data/projections/suggestion_viewport.json
+M	data/projections/why_connected_candidates.ndjson
+M	data/projections/why_connected_queue.ndjson
+A	docs/STATUS_2026-03-13_MULTIMODAL_AND_RANKING.md
+M	src/chatgpt_parser/graph/extractors/signals.py
+M	src/chatgpt_parser/projections/stable.py
+M	src/chatgpt_parser/projections/suggestion_queue.py
+M	tests/test_extractors/test_signals.py
+M	tests/test_projections_builder.py
+M	tests/test_suggestion_queue.py

@@ -1,0 +1,16 @@
+﻿data/projections/activity_calendar.ndjson
+data/projections/artifact_index.ndjson
+data/projections/artifact_workflow_paths.ndjson
+data/projections/decision_trace.ndjson
+data/projections/entity_usage_map.ndjson
+data/projections/error_debug_traces.ndjson
+data/projections/lineage_views.ndjson
+data/projections/operator_attention_queue.ndjson
+data/projections/projection_validation.json
+data/projections/search_index.ndjson
+data/projections/session_classification.ndjson
+data/projections/session_strategy_summary.ndjson
+data/projections/snapshot_manifest.first_full_dataset.json
+data/projections/timeline.ndjson
+data/projections/tool_loop_patterns.ndjson
+data/projections/typed_vs_voice.ndjson

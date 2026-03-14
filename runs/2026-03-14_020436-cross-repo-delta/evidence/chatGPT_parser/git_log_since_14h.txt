@@ -1,0 +1,70 @@
+﻿commit dba25b1b391798eca1d61b542eabec4380355e62 (HEAD -> main, origin/main)
+Author: dciula <89288581+dciula@users.noreply.github.com>
+Date:   Fri Mar 13 23:57:23 2026 -0700
+
+    Add audio STT indexing and transcription pipeline
+
+ README.md                                          |  18 +
+ docs/AUDIO_STT_PLAN_2026-03-13.md                  | 318 +++++++++++
+ docs/AUDIO_STT_PLAN_archCollab.md                  | 291 ++++++++++
+ docs/AUDIO_STT_RUNBOOK.md                          | 243 ++++++++
+ docs/AUDIO_STT_STAGE2_codex_prompt.md              |  86 +++
+ docs/AUDIO_STT_STATUS_2026-03-13.md                |  81 +++
+ .../audio_stt/01_stage_1_transcribe_command.md     |  65 +++
+ .../02_stage_2_sidecar_contract_and_linkage.md     |  64 +++
+ .../audio_stt/03_stage_3_operational_controls.md   |  64 +++
+ .../audio_stt/04_stage_4_provider_integration.md   |  60 ++
+ .../audio_stt/05_stage_5_validation_and_rollout.md |  60 ++
+ pipeline/audio_stt/README.md                       |  14 +
+ pyproject.toml                                     |   1 +
+ src/chatgpt_parser/cli.py                          |  57 ++
+ src/chatgpt_parser/multimodal/__init__.py          |  20 +
+ src/chatgpt_parser/multimodal/audio_index.py       | 135 ++++-
+ src/chatgpt_parser/multimodal/audio_transcribe.py  | 605 ++++++++++++++++++++
+ src/chatgpt_parser/multimodal/transcripts.py       |  34 +-
+ src/chatgpt_parser/parser.py                       |  13 +-
+ src/chatgpt_parser/projections/builder.py          |  10 +
+ src/chatgpt_parser/schemas.py                      |   1 +
+ tests/test_audio_index.py                          | 268 +++++++++
+ tests/test_audio_stt_smoke.py                      |  97 ++++
+ tests/test_audio_transcribe.py                     | 631 +++++++++++++++++++++
+ tests/test_parser.py                               |  72 +++
+ tests/test_transcript_linkage.py                   | 217 +++++++
+ 26 files changed, 3515 insertions(+), 10 deletions(-)
+ create mode 100644 docs/AUDIO_STT_PLAN_2026-03-13.md
+ create mode 100644 docs/AUDIO_STT_PLAN_archCollab.md
+ create mode 100644 docs/AUDIO_STT_RUNBOOK.md
+ create mode 100644 docs/AUDIO_STT_STAGE2_codex_prompt.md
+ create mode 100644 docs/AUDIO_STT_STATUS_2026-03-13.md
+ create mode 100644 pipeline/audio_stt/01_stage_1_transcribe_command.md
+ create mode 100644 pipeline/audio_stt/02_stage_2_sidecar_contract_and_linkage.md
+ create mode 100644 pipeline/audio_stt/03_stage_3_operational_controls.md
+ create mode 100644 pipeline/audio_stt/04_stage_4_provider_integration.md
+ create mode 100644 pipeline/audio_stt/05_stage_5_validation_and_rollout.md
+ create mode 100644 pipeline/audio_stt/README.md
+ create mode 100644 src/chatgpt_parser/multimodal/audio_transcribe.py
+ create mode 100644 tests/test_audio_stt_smoke.py
+ create mode 100644 tests/test_audio_transcribe.py
+
+commit 93caa02a51ccf9cd92a46f67df4d7dad4a84b22b
+Author: dciula <89288581+dciula@users.noreply.github.com>
+Date:   Fri Mar 13 20:29:21 2026 -0700
+
+    Improve projection ranking hygiene
+
+ ARCHITECTURE_STATE.md                              |    12 +-
+ data/projections/artifact_workflow_summary.json    |   162 +-
+ data/projections/command_usage.ndjson              |   423 +-
+ data/projections/hub_suggestions.ndjson            |   182 +-
+ data/projections/suggestion_viewport.json          |    88 +-
+ data/projections/why_connected_candidates.ndjson   | 51455 +++----------------
+ data/projections/why_connected_queue.ndjson        |   500 +-
+ docs/STATUS_2026-03-13_MULTIMODAL_AND_RANKING.md   |   117 +
+ src/chatgpt_parser/graph/extractors/signals.py     |   192 +-
+ src/chatgpt_parser/projections/stable.py           |     5 +-
+ src/chatgpt_parser/projections/suggestion_queue.py |   250 +-
+ tests/test_extractors/test_signals.py              |    69 +
+ tests/test_projections_builder.py                  |    49 +-
+ tests/test_suggestion_queue.py                     |   331 +
+ 14 files changed, 10036 insertions(+), 43799 deletions(-)
+ create mode 100644 docs/STATUS_2026-03-13_MULTIMODAL_AND_RANKING.md

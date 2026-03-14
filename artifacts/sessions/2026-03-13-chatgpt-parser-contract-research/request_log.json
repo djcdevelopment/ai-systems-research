@@ -1,0 +1,45 @@
+{
+  "request_id": "2026-03-13-chatgpt-parser-contract-research",
+  "system_id": "chatgpt_parser",
+  "session_timestamp": "2026-03-13",
+  "inputs_used": [
+    "D:\\work\\ai-systems-research\\ARTIFACT_SCHEMA.md",
+    "D:\\work\\ai-systems-research\\package-research-session.ps1",
+    "D:\\work\\chatGPT_parser\\README.md",
+    "D:\\work\\chatGPT_parser\\docs\\architecture\\CURRENT_ARCHITECTURE_OVERVIEW.md",
+    "D:\\work\\chatGPT_parser\\src\\chatgpt_parser\\cli.py",
+    "D:\\work\\chatGPT_parser\\data\\graph\\graph_manifest.json",
+    "D:\\work\\chatGPT_parser\\data\\graph\\graph_warning_triage.json",
+    "D:\\work\\chatGPT_parser\\data\\projections\\snapshot_manifest.first_full_dataset.json",
+    "D:\\work\\chatGPT_parser\\data\\projections\\projection_validation.json",
+    "D:\\work\\chatGPT_parser\\data\\projections\\projection_catalog.json",
+    "D:\\work\\chatGPT_parser\\docs\\SESSION_CHANGELOG_2026-03-13.md"
+  ],
+  "files_touched": [
+    "D:\\work\\chatGPT_parser\\tmp\\research_session_2026-03-13-chatgpt-parser-contract-research\\system_snapshot.md",
+    "D:\\work\\chatGPT_parser\\tmp\\research_session_2026-03-13-chatgpt-parser-contract-research\\lesson_learned.md",
+    "D:\\work\\chatGPT_parser\\tmp\\research_session_2026-03-13-chatgpt-parser-contract-research\\complexity_inflection_points.md",
+    "D:\\work\\chatGPT_parser\\tmp\\research_session_2026-03-13-chatgpt-parser-contract-research\\strategy_context_reduction.md",
+    "D:\\work\\chatGPT_parser\\tmp\\research_session_2026-03-13-chatgpt-parser-contract-research\\research_bridge.md",
+    "D:\\work\\chatGPT_parser\\tmp\\research_session_2026-03-13-chatgpt-parser-contract-research\\request_log.json",
+    "D:\\work\\chatGPT_parser\\tmp\\research_session_2026-03-13-chatgpt-parser-contract-research\\analysis_prompt.md"
+  ],
+  "decisions": [
+    "Followed ARTIFACT_SCHEMA.md plus package-research-session.ps1 as the canonical contract instead of mirroring the older reduced chatgpt-parser session bundle.",
+    "Used current emitted graph/projection artifacts as the primary evidence base instead of reconstructing state from plans alone.",
+    "Included request_log.json and analysis_prompt.md so the package is extended rather than merely canonical."
+  ],
+  "open_questions": [
+    "Whether projection_catalog.json should become a cross-repo consumer contract.",
+    "Whether future research packaging should ingest producer manifests automatically."
+  ],
+  "artifacts_generated": [
+    "lesson_learned.md",
+    "complexity_inflection_points.md",
+    "strategy_context_reduction.md",
+    "research_bridge.md",
+    "system_snapshot.md",
+    "request_log.json",
+    "analysis_prompt.md"
+  ]
+}

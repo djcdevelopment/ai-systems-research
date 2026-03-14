@@ -1,0 +1,17 @@
+﻿ data/projections/activity_calendar.ndjson          |   32 +-
+ data/projections/artifact_index.ndjson             | 1148 +++---
+ data/projections/artifact_workflow_paths.ndjson    | 3906 ++------------------
+ data/projections/decision_trace.ndjson             |  470 +--
+ data/projections/entity_usage_map.ndjson           | 1464 +-------
+ data/projections/error_debug_traces.ndjson         | 1068 +++---
+ data/projections/lineage_views.ndjson              | 2288 ++++++------
+ data/projections/operator_attention_queue.ndjson   |  400 +-
+ data/projections/projection_validation.json        |   18 +-
+ data/projections/search_index.ndjson               | 3055 ++++-----------
+ data/projections/session_classification.ndjson     |   42 +-
+ data/projections/session_strategy_summary.ndjson   |  470 +--
+ .../snapshot_manifest.first_full_dataset.json      |   31 +-
+ data/projections/timeline.ndjson                   |  470 +--
+ data/projections/tool_loop_patterns.ndjson         |  617 ++--
+ data/projections/typed_vs_voice.ndjson             |   42 +-
+ 16 files changed, 4442 insertions(+), 11079 deletions(-)
