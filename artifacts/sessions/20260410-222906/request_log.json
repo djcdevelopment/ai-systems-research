@@ -1,0 +1,47 @@
+{
+  "request_id": "20260410-222906-liveview-projection-catalog-contract-fix",
+  "system_id": "liveview",
+  "session_timestamp": "20260410-222906",
+  "inputs_used": [
+    "D:\\work\\liveView\\AGENTS.md",
+    "D:\\work\\liveView\\RESEARCH_LINK.md",
+    "D:\\work\\liveView\\PROJECT_CONTEXT.md",
+    "D:\\work\\liveView\\SNAPSHOT_CONTRACT.md",
+    "D:\\work\\ai-systems-research\\ARTIFACT_SCHEMA.md",
+    "D:\\work\\ai-systems-research\\package-research-session.ps1",
+    "D:\\work\\chatGPT_parser\\src\\chatgpt_parser\\projections\\catalog.py",
+    "D:\\work\\chatGPT_parser\\src\\chatgpt_parser\\projections\\builder.py",
+    "D:\\work\\chatGPT_parser\\tests\\test_projections_builder.py",
+    "D:\\work\\liveView\\ui\\src\\data\\loadProjectionCatalog.ts",
+    "D:\\work\\liveView\\ui\\src\\data\\loadObservatoryData.ts",
+    "D:\\work\\liveView\\ui\\src\\validation\\projectionCatalogSchemas.ts",
+    "D:\\work\\liveView\\ui\\tests\\observatoryDataLoader.test.cjs"
+  ],
+  "files_touched": [
+    "D:\\work\\liveView\\artifacts\\sessions\\20260410-222906\\lesson_learned.md",
+    "D:\\work\\liveView\\artifacts\\sessions\\20260410-222906\\complexity_inflection_points.md",
+    "D:\\work\\liveView\\artifacts\\sessions\\20260410-222906\\strategy_context_reduction.md",
+    "D:\\work\\liveView\\artifacts\\sessions\\20260410-222906\\research_bridge.md",
+    "D:\\work\\liveView\\artifacts\\sessions\\20260410-222906\\system_snapshot.md",
+    "D:\\work\\liveView\\artifacts\\sessions\\20260410-222906\\request_log.json",
+    "D:\\work\\chatGPT_parser\\docs\\architecture\\PROJECTION_CONTRACT.md"
+  ],
+  "decisions": [
+    "Publish producer-side generated_at instead of relying on UI-only inference.",
+    "Source generated_at from graph_manifest.build_time to keep catalog metadata deterministic.",
+    "Use one parser path for projection_catalog.json across Workbench and Observatory.",
+    "Package the implementation session into ai-systems-research through the repository contract boundary."
+  ],
+  "open_questions": [
+    "Whether non-stable producer surfaces should keep experimental or adopt review/suggested labels.",
+    "Whether packaging should eventually validate markdown headings in addition to filenames."
+  ],
+  "artifacts_generated": [
+    "artifacts/sessions/20260410-222906/lesson_learned.md",
+    "artifacts/sessions/20260410-222906/complexity_inflection_points.md",
+    "artifacts/sessions/20260410-222906/strategy_context_reduction.md",
+    "artifacts/sessions/20260410-222906/research_bridge.md",
+    "artifacts/sessions/20260410-222906/system_snapshot.md",
+    "artifacts/sessions/20260410-222906/request_log.json"
+  ]
+}
