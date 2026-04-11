@@ -31,3 +31,5 @@ artifacts/tmp/
 # IDE
 .vscode/
 .idea/
+.claude/
+
