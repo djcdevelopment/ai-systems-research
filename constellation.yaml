@@ -1,0 +1,173 @@
+# ai-systems-research Constellation Manifest
+#
+# Hand-enrolled 2026-05-24 against schema_version: 1 (hardened v1 spec).
+# Spec reference: D:/work/gad/pm/manifest/MANIFEST-SCHEMA.md
+# Worked example this is based on: D:/work/gad/pm/manifest/SCHEMA-EXTENSIONS-v1.md §4
+# Scope reference: D:/work/gad/pm/manifest/SCOPE-V1.md
+#
+# Context: ai-systems-research is the *proto-registry* per MANIFEST_LINK.md — the
+# working registry pattern that the formal framework now codifies. The constellation
+# rooted here is the multi-repo AI development ecosystem (ai-dev-system + liveview
+# spine + chatGPT_parser + this repo). This is the N=2 stress-test fixture for the
+# v0.1 validator (GAD being N=1).
+#
+# Many fields carry # CHECK markers because they were derived from the §4 worked
+# example, not from a fresh live verification pass. The marker is the schema's
+# intended honest-uncertainty signal. v1.1+'s discovery mode would resolve these
+# automatically; hand-enroll leaves them for the operator.
+
+schema_version: 1
+
+# Top-level structural classification
+archetype: research-only       # synthesis-heavy; no Discord, no ADO, no saga apparatus
+topology: peer                  # no central repo; organized around artifacts + contracts (per §4)
+conformance: extended           # # CHECK markers below; honest about uncertainty
+
+constellation:
+  name: ai-systems-research
+  description: "Multi-repo AI development ecosystem — observation, synthesis, contract surfaces"
+  root_path: D:\work\ai-systems-research
+  pm_workspace: pm/             # CHECK: folder does NOT exist yet. Repo is artifact-organized
+                                # around analysis/, research/, synthesis/, runs/. Operator may
+                                # prefer pm_workspace: analysis/ to point at existing layout.
+
+identity:
+  github_org: djcdevelopment
+  # ado_org / ado_project / ado_area_path_root / ado_team: omitted — archetype is research-only;
+  # the _archetype_requires_apparatus validator only enforces these when archetype == "presence".
+
+# discord: omitted — archetype is research-only
+# saga: omitted — no saga thread for research-only archetypes
+
+repos:
+  - name: ai-dev-system
+    kind: git
+    role: "Runtime evidence producer — Claude-CLI run harness with structured artifact emission"
+    producer_type: runtime_execution
+    github: djcdevelopment/ai-dev-system
+    visibility: public            # CHECK: verify live via `gh api repos/djcdevelopment/ai-dev-system --jq .visibility`
+    local_path: D:\work\ai-dev-system
+    summary_doc: pm/repos/ai-dev-system.md   # CHECK: doc to be created (pm/ not present yet)
+    primary: false
+    lifecycle: active
+
+  - name: liveview
+    kind: git
+    role: "Umbrella + research-handoff seam for observability stack"
+    producer_type: artifact_synthesis
+    github: djcdevelopment/liveView                  # note: mixed-case remote
+    visibility: private           # CHECK: verify live
+    local_path: D:\work\liveview
+    summary_doc: pm/repos/liveview.md                # CHECK: doc to be created
+    primary: false
+    lifecycle: active
+    aliases: [liveView]                              # local-dir lowercase vs remote mixed-case
+
+  - name: liveview-ingest
+    kind: git                     # CHECK: may be a monorepo-package under liveview (kind=monorepo-package + parent=liveview)
+    role: "Folders → snapshot artifacts; Sonnet-driven"
+    producer_type: telemetry_ingest
+    github: djcdevelopment/liveView-ingest           # CHECK: verify remote name
+    visibility: private           # CHECK: verify live
+    local_path: D:\work\liveview\ingest
+    summary_doc: pm/repos/liveview-ingest.md         # CHECK
+    primary: false
+    lifecycle: active
+    parent: liveview              # submodule relationship
+    depends_on: [ai-dev-system, chatGPT_parser]
+
+  - name: liveview-ui
+    kind: git                     # CHECK: may be monorepo-package (same as liveview-ingest)
+    role: "Visualizer: Explorer / Timeline / Inspector / Workbench"
+    producer_type: operational_viewer
+    github: djcdevelopment/liveview-ui               # CHECK: verify remote name
+    visibility: private           # CHECK: verify live
+    local_path: D:\work\liveview\ui
+    summary_doc: pm/repos/liveview-ui.md             # CHECK
+    primary: false
+    lifecycle: active
+    parent: liveview
+    depends_on: [liveview-ingest, chatGPT_parser]
+
+  - name: chatGPT_parser
+    kind: git
+    role: "ChatGPT export → normalized corpus + projections; Phase 1/2/4 pipeline"
+    producer_type: external_corpus
+    github: djcdevelopment/chatGPT_parse             # NOTE: remote name differs from local dir (chatGPT_parser)
+    visibility: private           # CHECK: verify live
+    local_path: D:\work\chatGPT_parser
+    summary_doc: pm/repos/chatGPT_parser.md          # CHECK
+    primary: false
+    lifecycle: active
+    aliases: [chatGPT_parse]      # local-vs-remote name drift
+
+  - name: ai-systems-research
+    kind: git
+    role: "Research archive sink — synthesis + observations + snapshots + the proto-registry"
+    producer_type: artifact_synthesis
+    github: djcdevelopment/ai-systems-research
+    visibility: private           # CHECK: verify live (Agent B's recon suggested public; §4 says private)
+    local_path: D:\work\ai-systems-research
+    summary_doc: pm/repos/ai-systems-research.md     # CHECK
+    primary: false
+    audience: "Derek + future agents reading the constellation"
+    lifecycle: active
+    aliases: [ai-agent-research]  # historical name (per LINEAGE.md + narrative docs)
+
+# Cross-repo contract handshakes — populated from §4 worked example.
+contracts:
+  - name: ARTIFACT_SCHEMA
+    producer_repo: ai-dev-system
+    consumer_repos: [liveview-ingest, ai-systems-research]
+    contract_doc: docs/ARTIFACT_SCHEMA.md         # CHECK: relative to ai-dev-system root
+    contract_version: "1"
+    stability: stable
+
+  - name: SESSION_LOG
+    producer_repo: ai-systems-research
+    consumer_repos: [ai-systems-research]         # self-consuming — the append-only ledger pattern
+    contract_doc: ARTIFACT_SCHEMA.md              # in ai-systems-research root
+    contract_version: "1"
+    stability: stable
+
+  - name: projection_catalog
+    producer_repo: chatGPT_parser
+    consumer_repos: [liveview-ui]
+    contract_doc: docs/architecture/PROJECTION_CONTRACT.md
+    stability: stable
+
+  - name: snapshot_contract
+    producer_repo: liveview-ingest
+    consumer_repos: [liveview-ui]
+    contract_doc: SNAPSHOT_CONTRACT.md            # in liveview/ root, not ingest/ (per §4)
+    stability: stable
+
+# External data inputs (non-git directories the constellation depends on).
+data_sources:
+  - name: chatgpt_export
+    path: D:\work\dump
+    format: chatgpt_export
+    consumed_by: [chatGPT_parser]
+    ingestion_contract: docs/architecture/PROJECTION_CONTRACT.md   # CHECK: relative to chatGPT_parser
+
+# Locally-installed pipeline tools.
+pipeline_tools:
+  - name: local-whisper
+    role: "Audio transcription for ChatGPT voice-mode exports"
+    install_target: local
+    version_pin: null             # CHECK: pin against current installed version
+
+# workflow: inherits all defaults
+
+telemetry:
+  otel_collector_endpoint: http://localhost:4317
+  otel_protocol: grpc
+  service_name_prefix: ai-systems-research     # NOTE: no "-pm" suffix; archetype is not presence
+
+# No build_handoff for this constellation; no ember-equivalent.
+
+# Model pins for any framework-driven agent. Empty until v1.1+ ships agent execution.
+agents: []
+
+# Per-constellation overrides to framework defaults. Empty = inherit everything.
+framework_defaults_override: {}
