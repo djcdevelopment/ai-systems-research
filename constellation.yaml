@@ -114,6 +114,28 @@ repos:
     lifecycle: active
     aliases: [ai-agent-research]  # historical name (per LINEAGE.md + narrative docs)
 
+  - name: work-visuals
+    kind: git
+    role: "Local analysis repo for visualizing workspace activity and temporal patterns across directories"
+    producer_type: operational_viewer
+    github: djcdevelopment/work-visuals
+    visibility: private
+    local_path: E:\work\work-visuals
+    primary: false
+    depends_on: [liveview]
+    lifecycle: active
+
+  - name: reader
+    kind: git
+    role: "Digital reading light for deep focus: dims screen except current reading line (IndexCard)"
+    producer_type: dev_tooling
+    github: djcdevelopment/indexcard
+    visibility: private
+    local_path: E:\work\reader
+    primary: false
+    lifecycle: active
+
+
 # Cross-repo contract handshakes — populated from §4 worked example.
 contracts:
   - name: ARTIFACT_SCHEMA
