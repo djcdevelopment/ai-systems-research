@@ -1,9 +1,9 @@
 # ai-systems-research Constellation Manifest
 #
 # Hand-enrolled 2026-05-24 against schema_version: 1 (hardened v1 spec).
-# Spec reference: D:/work/gad/pm/manifest/MANIFEST-SCHEMA.md
-# Worked example this is based on: D:/work/gad/pm/manifest/SCHEMA-EXTENSIONS-v1.md §4
-# Scope reference: D:/work/gad/pm/manifest/SCOPE-V1.md
+# Spec reference: E:/work/gad/pm/manifest/MANIFEST-SCHEMA.md
+# Worked example this is based on: E:/work/gad/pm/manifest/SCHEMA-EXTENSIONS-v1.md §4
+# Scope reference: E:/work/gad/pm/manifest/SCOPE-V1.md
 #
 # Context: ai-systems-research is the *proto-registry* per MANIFEST_LINK.md — the
 # working registry pattern that the formal framework now codifies. The constellation
@@ -26,7 +26,7 @@ conformance: extended           # # CHECK markers below; honest about uncertaint
 constellation:
   name: ai-systems-research
   description: "Multi-repo AI development ecosystem — observation, synthesis, contract surfaces"
-  root_path: D:\work\ai-systems-research
+  root_path: E:\work\ai-systems-research
   pm_workspace: pm/             # CHECK: folder does NOT exist yet. Repo is artifact-organized
                                 # around analysis/, research/, synthesis/, runs/. Operator may
                                 # prefer pm_workspace: analysis/ to point at existing layout.
@@ -46,7 +46,7 @@ repos:
     producer_type: runtime_execution
     github: djcdevelopment/ai-dev-system
     visibility: public            # CHECK: verify live via `gh api repos/djcdevelopment/ai-dev-system --jq .visibility`
-    local_path: D:\work\ai-dev-system
+    local_path: E:\work\ai-dev-system
     summary_doc: pm/repos/ai-dev-system.md   # CHECK: doc to be created (pm/ not present yet)
     primary: false
     lifecycle: active
@@ -57,7 +57,7 @@ repos:
     producer_type: artifact_synthesis
     github: djcdevelopment/liveView                  # note: mixed-case remote
     visibility: private           # CHECK: verify live
-    local_path: D:\work\liveview
+    local_path: E:\work\liveview
     summary_doc: pm/repos/liveview.md                # CHECK: doc to be created
     primary: false
     lifecycle: active
@@ -69,7 +69,7 @@ repos:
     producer_type: telemetry_ingest
     github: djcdevelopment/liveView-ingest           # CHECK: verify remote name
     visibility: private           # CHECK: verify live
-    local_path: D:\work\liveview\ingest
+    local_path: E:\work\liveview\ingest
     summary_doc: pm/repos/liveview-ingest.md         # CHECK
     primary: false
     lifecycle: active
@@ -82,7 +82,7 @@ repos:
     producer_type: operational_viewer
     github: djcdevelopment/liveview-ui               # CHECK: verify remote name
     visibility: private           # CHECK: verify live
-    local_path: D:\work\liveview\ui
+    local_path: E:\work\liveview\ui
     summary_doc: pm/repos/liveview-ui.md             # CHECK
     primary: false
     lifecycle: active
@@ -95,7 +95,7 @@ repos:
     producer_type: external_corpus
     github: djcdevelopment/chatGPT_parse             # NOTE: remote name differs from local dir (chatGPT_parser)
     visibility: private           # CHECK: verify live
-    local_path: D:\work\chatGPT_parser
+    local_path: E:\work\chatGPT_parser
     summary_doc: pm/repos/chatGPT_parser.md          # CHECK
     primary: false
     lifecycle: active
@@ -107,7 +107,7 @@ repos:
     producer_type: artifact_synthesis
     github: djcdevelopment/ai-systems-research
     visibility: private           # CHECK: verify live (Agent B's recon suggested public; §4 says private)
-    local_path: D:\work\ai-systems-research
+    local_path: E:\work\ai-systems-research
     summary_doc: pm/repos/ai-systems-research.md     # CHECK
     primary: false
     audience: "Derek + future agents reading the constellation"
@@ -145,7 +145,7 @@ contracts:
 # External data inputs (non-git directories the constellation depends on).
 data_sources:
   - name: chatgpt_export
-    path: D:\work\dump
+    path: E:\work\dump
     format: chatgpt_export
     consumed_by: [chatGPT_parser]
     ingestion_contract: docs/architecture/PROJECTION_CONTRACT.md   # CHECK: relative to chatGPT_parser
